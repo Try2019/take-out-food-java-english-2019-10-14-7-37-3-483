@@ -45,7 +45,7 @@ public class App {
                             promotion+=items.get(j).getName();
                             isPromotion=1;
                         }else {
-                            promotion+=", "+items.get(j).getName();
+                            promotion+="，"+items.get(j).getName();
                         }
                     }else {
                         cutPrice+=items.get(j).getPrice()*orderNum[i];
@@ -64,16 +64,16 @@ public class App {
         if(!(halfPro==0&&isPromotion==0)){
             temp+="Promotion used:\n";
             if(halfPrice<=cutPrice){
-                temp+="Deduct 6 yuan when the order reaches 30 yuan, saving 6 yuan\n";
+                temp+="满30减6 yuan，saving 6 yuan\n";
                 temp+="-----------------------------------\n";
-                temp+="Total: " + halfPrice + " yuan\n";
+                temp+="Total：" + halfPrice + " yuan\n";
             }else {
-                temp+="Half price for certain dishes " + promotion + ")," + " saving " + (int)(totalPrice - cutPrice) + " yuan\n";
+                temp+="Half price for certain dishes " + promotion + ")，" + "saving " + (int)(totalPrice - cutPrice) + " yuan\n";
                 temp+="-----------------------------------\n";
-                temp+="Total: " + cutPrice + " yuan\n";
+                temp+="Total：" + cutPrice + " yuan\n";
             }
         }else {
-            temp+="Total:"+totalPrice+" yuan\n";
+            temp+="Total："+totalPrice+" yuan\n";
         }
         temp+="===================================";
         return temp;
