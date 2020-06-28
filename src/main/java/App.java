@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -14,7 +15,75 @@ public class App {
 
     public String bestCharge(List<String> inputs) {
         //TODO: write code here
-
+        String[] orderID=new String[inputs.size()];
+        int[] orderNum=new int[inputs.size()];
+        for(int i=0;i<inputs.size();i++){
+            orderID[i]=inputs.get(i).split(" x ")[0];
+            orderNum[i]=Integer.parseInt(inputs.get(i).split(" x ")[1]);
+        }
+        int totalPrice=0,cutPrice=0,halfPrice=0,halfPro=0,isPromotion=0;
+        String promotion="(";
+        System.out.println("============= Order details =============");
+        List<Item>items=itemRepository.findAll();
+        List<SalesPromotion>all=salesPromotionRepository.findAll();
+        List<String>promos=new ArrayList<>();
+        for(int i=0;i<all.size();i++){
+            if(all.get(i).getType().equals("50%_DISCOUNT_ON_SPECIFIED_ITEMS")){
+                promos=all.get(i).getRelatedItems();
+            }
+        }
+        for(int i=0;i<orderID.length;i++){
+            for (int j=0;j<items.size();j++){
+                if(orderID[i].equals(items.get(j).getId())){
+                    System.out.println(items.get(j).getName() + " x " + orderNum[i] + " = " + (int)(items.get(j).getPrice() * orderNum[i] )+ " yuan");
+                    totalPrice+=items.get(j).getPrice() * orderNum[i];
+                    String itemName=items.get(j).getId();
+                    if(judge(promos,itemName)==1){
+                        cutPrice+=items.get(j).getPrice()*orderNum[i]/2;
+                        if(isPromotion==0){
+                            promotion+=items.get(j).getName();
+                            isPromotion=1;
+                        }else {
+                            promotion+=", "+items.get(j).getName();
+                        }
+                    }else {
+                        cutPrice+=items.get(j).getPrice()*orderNum[i];
+                    }
+                    break;
+                    }
+                }
+            }
+        System.out.println("-----------------------------------");
+        if(totalPrice>=30){
+            halfPro=1;
+            halfPrice=totalPrice-6;
+        }else {
+            halfPrice=totalPrice;
+        }
+        if(!(halfPro==0&&isPromotion==0)){
+            System.out.println("Promotion used:");
+            if(halfPrice<=cutPrice){
+                System.out.println("Deduct 6 yuan when the order reaches 30 yuan, saving 6 yuan");
+                System.out.println("-----------------------------------");
+                System.out.println("Total: " + halfPrice + " yuan");
+            }else {
+                System.out.println("Half price for certain dishes " + promotion + ")," + " saving " + (int)(totalPrice - cutPrice) + " yuan");
+                System.out.println("-----------------------------------");
+                System.out.println("In total: " + cutPrice + " yuan");
+            }
+        }else {
+            System.out.println("In total: "+totalPrice+" yuan");
+        }
+        System.out.println("===================================");
         return null;
+    }
+
+    int judge(List<String>promos,String itemName){
+        for(int k=0;k<promos.size();k++){
+            if(itemName.equals(promos.get(k))){
+                return 1;
+            }
+        }
+        return 0;
     }
 }

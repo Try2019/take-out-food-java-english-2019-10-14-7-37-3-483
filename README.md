@@ -1,5 +1,5 @@
 # Take-away billing system
-
+老师您好，就是我本地测试时没有问题，但是使用gradle测试时总是不通过。。我之前没有用过gradle，如果方便的话可以帮我看看吗？谢谢！
 ## Demands description
 
 A fast food brand launched its own take-away app where users can directly order a meal on mobile phones. The app will make accumulations based on the selected "item", "count" and "promotion" and inform users the charge to be paid.
