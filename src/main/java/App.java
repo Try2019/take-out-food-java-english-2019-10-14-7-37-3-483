@@ -15,6 +15,7 @@ public class App {
 
     public String bestCharge(List<String> inputs) {
         //TODO: write code here
+        String temp="";
         String[] orderID=new String[inputs.size()];
         int[] orderNum=new int[inputs.size()];
         for(int i=0;i<inputs.size();i++){
@@ -23,7 +24,7 @@ public class App {
         }
         int totalPrice=0,cutPrice=0,halfPrice=0,halfPro=0,isPromotion=0;
         String promotion="(";
-        System.out.println("============= Order details =============");
+        temp+="============= Order details =============\n";
         List<Item>items=itemRepository.findAll();
         List<SalesPromotion>all=salesPromotionRepository.findAll();
         List<String>promos=new ArrayList<>();
@@ -35,7 +36,7 @@ public class App {
         for(int i=0;i<orderID.length;i++){
             for (int j=0;j<items.size();j++){
                 if(orderID[i].equals(items.get(j).getId())){
-                    System.out.println(items.get(j).getName() + " x " + orderNum[i] + " = " + (int)(items.get(j).getPrice() * orderNum[i] )+ " yuan");
+                    temp+=items.get(j).getName() + " x " + orderNum[i] + " = " + (int)(items.get(j).getPrice() * orderNum[i] )+ " yuan\n";
                     totalPrice+=items.get(j).getPrice() * orderNum[i];
                     String itemName=items.get(j).getId();
                     if(judge(promos,itemName)==1){
@@ -53,7 +54,7 @@ public class App {
                     }
                 }
             }
-        System.out.println("-----------------------------------");
+        temp+="-----------------------------------\n";
         if(totalPrice>=30){
             halfPro=1;
             halfPrice=totalPrice-6;
@@ -61,21 +62,21 @@ public class App {
             halfPrice=totalPrice;
         }
         if(!(halfPro==0&&isPromotion==0)){
-            System.out.println("Promotion used:");
+            temp+="Promotion used:\n";
             if(halfPrice<=cutPrice){
-                System.out.println("Deduct 6 yuan when the order reaches 30 yuan, saving 6 yuan");
-                System.out.println("-----------------------------------");
-                System.out.println("Total: " + halfPrice + " yuan");
+                temp+="Deduct 6 yuan when the order reaches 30 yuan, saving 6 yuan\n";
+                temp+="-----------------------------------\n";
+                temp+="Total: " + halfPrice + " yuan\n";
             }else {
-                System.out.println("Half price for certain dishes " + promotion + ")," + " saving " + (int)(totalPrice - cutPrice) + " yuan");
-                System.out.println("-----------------------------------");
-                System.out.println("In total: " + cutPrice + " yuan");
+                temp+="Half price for certain dishes " + promotion + ")," + " saving " + (int)(totalPrice - cutPrice) + " yuan\n";
+                temp+="-----------------------------------\n";
+                temp+="Total: " + cutPrice + " yuan\n";
             }
         }else {
-            System.out.println("In total: "+totalPrice+" yuan");
+            temp+="Total:"+totalPrice+" yuan\n";
         }
-        System.out.println("===================================");
-        return null;
+        temp+="===================================";
+        return temp;
     }
 
     int judge(List<String>promos,String itemName){
